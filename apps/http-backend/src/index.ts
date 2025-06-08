@@ -3,6 +3,8 @@ import { z } from "zod";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { middleware } from "./middleware";
+import { JWT_SECRET } from '@repo/backend-common/config'
+
 
 const app = express();
 app.use(express.json())
@@ -91,7 +93,7 @@ app.post('/signin',async function(req,res){
             message: "Incorrect Credentials"
         })
     }else{
-        const token = jwt.sign({id: user._id}, "Secret123")
+        const token = jwt.sign({id: user._id}, JWT_SECRET)
         res.json({
             token:token,
             message: "sign in successful"
