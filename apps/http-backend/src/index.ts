@@ -4,24 +4,15 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { middleware } from "./middleware";
 import { JWT_SECRET } from '@repo/backend-common/config'
+import { createUserSchema, signinSchema, roomSchema } from "@repo/common/types"
 
 
 const app = express();
 app.use(express.json())
 
 app.post("/signup", async function (req, res) {
-  const requiredBody = z.object({
-    email: z.string().email(),
-    password: z
-      .string()
-      .min(6)
-      .regex(/[A-Z]/)
-      .regex(/[a-z]/)
-      .regex(/[0-9]/)
-      .regex(/[^A-Za-z0-9]/),
-  });
 
-  const safeParseData = requiredBody.safeParse(req.body);
+  const safeParseData = createUserSchema.safeParse(req.body);
   
   if(!safeParseData.success){
     res.json({
@@ -53,18 +44,8 @@ app.post("/signup", async function (req, res) {
 
 
 app.post('/signin',async function(req,res){
-    const requiredBody = z.object({
-    email: z.string().email(),
-    password: z
-      .string()
-      .min(6)
-      .regex(/[A-Z]/)
-      .regex(/[a-z]/)
-      .regex(/[0-9]/)
-      .regex(/[^A-Za-z0-9]/),
-  });
-
-  const safeParseData = requiredBody.safeParse(req.body);
+    
+  const safeParseData = signinSchema.safeParse(req.body);
 
   if (!safeParseData.success) {
     res.json({
@@ -110,6 +91,16 @@ app.post('/signin',async function(req,res){
 
 app.post('/create-room',middleware, function(req,res){
     // db call
+
+  const safeParseData = roomSchema.safeParse(req.body);
+  
+  if(!safeParseData.success){
+    res.json({
+        message: "Incorrect input format"
+    })
+    return;
+  }
+
 
     res.json({
         roomId: 123

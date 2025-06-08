@@ -17,9 +17,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "zod": "^3.25.51",
-    "@repo/backend-common":"workspace:*"
-
-    
+    "@repo/backend-common":"workspace:*",
+    "@repo/common":"workspace:*"
   },
   "keywords": [],
   "author": "",
